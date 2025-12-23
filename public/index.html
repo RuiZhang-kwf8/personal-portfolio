@@ -1,0 +1,262 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Portfolio | Rui Zhang</title>
+    <meta name="description" content="Personal portfolio" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/styles.css" />
+  </head>
+  <body>
+    <header class="site-header">
+      <nav class="nav">
+        <div class="nav-left">
+          <img src="/ex.jpg.png" alt="Profile" class="header-card" />
+          <a class="logo" href="#home">Rui Zhang</a>
+        </div>
+        <ul class="nav-links">
+          <li><a href="#education">Education</a></li>
+          <li><a href="#experience">Experience</a></li>
+          <li><a href="#projects">Projects</a></li>
+          <li><a href="#contact">Contact</a></li>
+          <li><a href="/resume.pdf" target="_blank" rel="noreferrer">Resume</a></li>
+        </ul>
+      </nav>
+    </header>
+
+    <main>
+      <section id="home" class="hero">
+        <div class="hero-bg"></div>
+        <div class="hero-content">
+          <p class="eyebrow">Hi, I'm</p>
+          <h1 class="title">Rui Zhang</h1>
+          <p class="subtitle">A passionate software engineer fascinated by algorithmic challenges and low-level systems design. Building efficient, scalable solutions that push the boundaries of computation.</p>
+          <div class="cta">
+            <a class="btn primary" href="#projects">View Projects</a>
+            <a class="btn" href="/resume.pdf" target="_blank" rel="noreferrer">View Resume</a>
+          </div>
+          <div class="socials">
+            <a aria-label="LinkedIn" href="https://www.linkedin.com/in/rui-zhang-24422a1bb/" target="_blank" rel="noreferrer">LinkedIn</a>
+            <a aria-label="GitHub" href="https://github.com/RuiZhang-kwf8" target="_blank" rel="noreferrer">GitHub</a>
+            <a aria-label="LeetCode" href="https://leetcode.com/u/ruizkwf8/" target="_blank" rel="noreferrer">LeetCode</a>
+          </div>
+        </div>
+      </section>
+
+      <section id="education" class="section">
+        <div class="container">
+          <h2>Education</h2>
+          <div class="card-list">
+            <article class="card reveal">
+              <h3>University of Virginia, College of Arts and Sciences</h3>
+              <p class="meta">Charlottesville, VA — Expected May 2026</p>
+              <p>Bachelor of Arts in Computer Science • GPA: 3.9</p>
+              <details>
+                <summary>Relevant coursework</summary>
+                <ul class="list">
+                  <li>Advanced Software Development, Software Development Essentials</li>
+                  <li>Data Structures and Algorithms I &amp; II</li>
+                  <li>Advanced Algorithms</li>
+                  <li>Machine Learning, Artificial Intelligence</li>
+                  <li>Cybersecurity</li>
+                  <li>Computer Systems and Organization I &amp; II</li>
+                  <li>Discrete Mathematics I &amp; II</li>
+                  <li>Web Applications</li>
+                </ul>
+              </details>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <section id="experience" class="section">
+        <div class="container">
+          <h2>Experience</h2>
+          <div class="timeline">
+            <article class="item reveal">
+              <div class="item-header">
+                <img src="/capitalone.jpg" alt="Capital One" class="company-logo" />
+                <div>
+                  <h3>Software Engineer</h3>
+                  <p class="meta">Capital One — June 2026 - Present</p>
+                </div>
+              </div>
+              <ul class="bullets">
+                <li>Incoming Software Engineer Intern at Capital One on Richmond's campus.</li>
+              </ul>
+            </article>
+            <article class="item reveal">
+              <div class="item-header">
+                <img src="/appian.jpg" alt="Appian" class="company-logo" />
+                <div>
+                  <h3>Software Engineer Intern</h3>
+                  <p class="meta">Appian — Jun 2025 - Aug 2025</p>
+                </div>
+              </div>
+              <ul class="bullets">
+                <li>Engineered Python scripts to collect GitLab CI/CD metrics and built a centralized Datadog dashboard, adopted by 30+ teams and 200+ engineers to track DORA metrics (deployment frequency, failure rate, MTTR).</li>
+                <li>Configured a single CI job to compare failures between dev and master branches, cutting root cause detection time by 40% and saving developers 5+ minutes per pipeline failure.</li>
+                <li>Optimized Java unit testing by merging 200+ tests, reducing CI runtime by 25% per run.</li>
+                <li>Developed 15+ unit tests for Python scripts managing GitLab pipelines, improving coverage and reducing errors by 30%.</li>
+                <li>Built a Python-based monitoring tool forwarding Argo CD data to Datadog, enabling real-time alerts and reducing outage response time from 15 minutes to under 5 minutes.</li>
+              </ul>
+            </article>
+            <article class="item reveal">
+              <div class="item-header">
+                <img src="/usda.png" alt="USDA" class="company-logo" />
+                <div>
+                  <h3>Software Engineer Intern</h3>
+                  <p class="meta">USDA — Jun 2024 - Apr 2025</p>
+                </div>
+              </div>
+              <ul class="bullets">
+                <li>Designed and launched USDA's first web application for visualizing wind speed vectors using MongoDB, React.js, Node.js, saving 10+ hours/week for 200+ firefighters nationwide.</li>
+                <li>Implemented automated logging and ZIP packaging in USDA's C++/Qt software, improving usability for 200+ users and reducing manual errors by 20%.</li>
+                <li>Integrated high-resolution (HRRR) weather data with C++, AWS S3, GCP, increasing wind model flexibility by 10% and enabling historical + forecasted simulations.</li>
+                <li>Developed and deployed an analytics dashboard with PHP/JavaScript on Apache2, monitoring lab systems and guiding resource allocation.</li>
+              </ul>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <section id="projects" class="section">
+        <div class="container">
+          <h2>Projects</h2>
+          <div class="grid">
+            <article class="card reveal">
+              <h3>Jumpster</h3>
+              <p>A prototype full-stack web application to display WindNinja's backend.</p>
+              <div class="tags">React.JS · Node.JS</div>
+              <div class="actions">
+                <a class="btn" href="https://github.com/RuiZhang-kwf8/Jumpster" target="_blank" rel="noreferrer">View Repo</a>
+              </div>
+            </article>
+            <article class="card reveal">
+              <h3>Windninja</h3>
+              <p>A diagnostic wind model developed for use in wildland fire modeling and weather simulation.</p>
+              <div class="tags">C++ · CMake · Qt · GDAL</div>
+              <div class="actions">
+                <a class="btn" href="https://github.com/RuiZhang-kwf8/Windninja" target="_blank" rel="noreferrer">View Repo</a>
+              </div>
+            </article>
+            <article class="card reveal">
+              <h3>Recipe Sharing App</h3>
+              <p>A collaborative application for sharing and discovering recipes with the community.</p>
+              <div class="tags">PHP · Javascript</div>
+              <div class="actions">
+                <a class="btn" href="https://github.com/ryanfrancissteele/recipe-sharing-app" target="_blank" rel="noreferrer">View Repo</a>
+              </div>
+            </article>
+            <article class="card reveal">
+              <h3>Whistleblowing App</h3>
+              <p>A secure platform enabling students to report dorm issues with administrator dashboards.</p>
+              <div class="tags">Django · PostgreSQL · AWS</div>
+              <div class="actions">
+                <a class="btn" href="https://github.com/uva-cs3240-s24/project-b-28" target="_blank" rel="noreferrer">View Repo</a>
+              </div>
+            </article>
+            <article class="card reveal">
+              <h3>Local RAG System</h3>
+              <p>A retrieval-augmented generation system for local document processing and semantic search.</p>
+              <div class="tags">Python · RAG · Ollama · FAISS Vector DB · Fast API</div>
+              <div class="actions">
+                <a class="btn" href="https://github.com/RuiZhang-kwf8/local-rag-system" target="_blank" rel="noreferrer">View Repo</a>
+              </div>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <section id="skills" class="section">
+        <div class="container">
+          <h2>Skills & Technologies</h2>
+          <div class="skills-grid">
+            <div class="skill-item" style="--level: 100%">
+              <div class="skill-name">Python</div>
+              <div class="skill-bar"><div class="skill-fill"></div></div>
+              <div class="skill-label">Expert</div>
+            </div>
+            <div class="skill-item" style="--level: 100%">
+              <div class="skill-name">DSA</div>
+              <div class="skill-bar"><div class="skill-fill"></div></div>
+              <div class="skill-label">Expert</div>
+            </div>
+            <div class="skill-item" style="--level: 95%">
+              <div class="skill-name">C++</div>
+              <div class="skill-bar"><div class="skill-fill"></div></div>
+              <div class="skill-label">Advanced</div>
+            </div>
+            <div class="skill-item" style="--level: 95%">
+              <div class="skill-name">Java</div>
+              <div class="skill-bar"><div class="skill-fill"></div></div>
+              <div class="skill-label">Advanced</div>
+            </div>
+            <div class="skill-item" style="--level: 95%">
+              <div class="skill-name">Algorithms</div>
+              <div class="skill-bar"><div class="skill-fill"></div></div>
+              <div class="skill-label">Advanced</div>
+            </div>
+            <div class="skill-item" style="--level: 95%">
+              <div class="skill-name">Linux</div>
+              <div class="skill-bar"><div class="skill-fill"></div></div>
+              <div class="skill-label">Advanced</div>
+            </div>
+            <div class="skill-item" style="--level: 85%">
+              <div class="skill-name">React.js</div>
+              <div class="skill-bar"><div class="skill-fill"></div></div>
+              <div class="skill-label">Proficient</div>
+            </div>
+            <div class="skill-item" style="--level: 85%">
+              <div class="skill-name">Node.js</div>
+              <div class="skill-bar"><div class="skill-fill"></div></div>
+              <div class="skill-label">Proficient</div>
+            </div>
+            <div class="skill-item" style="--level: 85%">
+              <div class="skill-name">AWS</div>
+              <div class="skill-bar"><div class="skill-fill"></div></div>
+              <div class="skill-label">Proficient</div>
+            </div>
+            <div class="skill-item" style="--level: 80%">
+              <div class="skill-name">Docker</div>
+              <div class="skill-bar"><div class="skill-fill"></div></div>
+              <div class="skill-label">Intermediate</div>
+            </div>
+            <div class="skill-item" style="--level: 80%">
+              <div class="skill-name">Git</div>
+              <div class="skill-bar"><div class="skill-fill"></div></div>
+              <div class="skill-label">Intermediate</div>
+            </div>
+            <div class="skill-item" style="--level: 75%">
+              <div class="skill-name">MongoDB</div>
+              <div class="skill-bar"><div class="skill-fill"></div></div>
+              <div class="skill-label">Intermediate</div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section id="contact" class="section">
+        <div class="container">
+          <h2>Get in Touch</h2>
+          <p>Feel free to reach out to me!</p>
+          <div class="contact">
+            <a class="btn primary" href="mailto:ruizhangslc2017@gmail.com">Email</a>
+            <a class="btn" href="https://www.linkedin.com/in/rui-zhang-24422a1bb/" target="_blank" rel="noreferrer">LinkedIn</a>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <div class="container">
+        <small style="visibility: hidden;"><span id="year"></span></small>
+      </div>
+    </footer>
+
+    <script src="/app.js"></script>
+  </body>
+</html>
