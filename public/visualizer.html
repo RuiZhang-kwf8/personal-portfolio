@@ -1,0 +1,505 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Pathfinding Visualizer</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      background: #000;
+      color: #e0e0e0;
+      min-height: 100vh;
+      padding: 40px 20px;
+    }
+    .container {
+      max-width: 900px;
+      margin: 0 auto;
+    }
+    h1 {
+      text-align: center;
+      margin-bottom: 8px;
+      font-size: clamp(28px, 5vw, 42px);
+      color: #fff;
+    }
+    .subtitle {
+      text-align: center;
+      color: #888;
+      margin-bottom: 30px;
+      font-size: 14px;
+    }
+    .mode-toggle {
+      display: flex;
+      justify-content: center;
+      gap: 12px;
+      margin-bottom: 20px;
+      flex-wrap: wrap;
+    }
+    .mode-btn {
+      padding: 8px 16px;
+      background: #222;
+      border: 1px solid #333;
+      color: #888;
+      border-radius: 6px;
+      cursor: pointer;
+      font-weight: 500;
+      font-size: 12px;
+      transition: all 200ms ease;
+    }
+    .mode-btn.active {
+      background: #fff;
+      color: #000;
+      border-color: #fff;
+    }
+    .controls {
+      display: flex;
+      gap: 12px;
+      margin-bottom: 30px;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+    button {
+      padding: 10px 20px;
+      background: #222;
+      border: 1px solid #333;
+      color: #ccc;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: 600;
+      font-size: 13px;
+      transition: all 200ms ease;
+    }
+    button:hover { background: #333; }
+    button.active {
+      background: #fff;
+      color: #000;
+      border-color: #fff;
+    }
+    #canvas {
+      display: block;
+      margin: 0 auto 30px;
+      background: #111;
+      border: 1px solid #333;
+      border-radius: 8px;
+      cursor: crosshair;
+    }
+    .legend {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+      gap: 15px;
+      margin-bottom: 30px;
+      padding: 20px;
+      background: #111;
+      border: 1px solid #333;
+      border-radius: 8px;
+    }
+    .legend-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 13px;
+    }
+    .legend-color {
+      width: 24px;
+      height: 24px;
+      border-radius: 6px;
+    }
+    .info {
+      background: #111;
+      border: 1px solid #333;
+      border-radius: 8px;
+      padding: 25px;
+      line-height: 1.6;
+    }
+    .algo-section {
+      margin-bottom: 16px;
+    }
+    .algo-name {
+      font-weight: 600;
+      color: #6aa6ff;
+      margin-bottom: 4px;
+      font-size: 14px;
+    }
+    .algo-desc {
+      font-size: 13px;
+      color: #aaa;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Pathfinding Visualizer</h1>
+    <p class="subtitle">Click to draw, select an algorithm, hit run</p>
+
+    <div class="mode-toggle">
+      <button class="mode-btn active" id="drawWalls">Draw Walls</button>
+      <button class="mode-btn" id="placeStart">Place Start</button>
+      <button class="mode-btn" id="placeEnd">Place End</button>
+    </div>
+
+    <div class="controls">
+      <button id="bfs">BFS</button>
+      <button id="astar">A*</button>
+      <button id="dfs">DFS</button>
+      <button id="dijkstra">Dijkstra's</button>
+      <button id="reset" style="background: rgba(192, 132, 252, 0.2); border-color: #c084fc; color: #c084fc;">Clear</button>
+    </div>
+
+    <canvas id="canvas"></canvas>
+
+    <div class="legend">
+      <div class="legend-item">
+        <div class="legend-color" style="background: #6aa6ff;"></div>
+        <span>Start</span>
+      </div>
+      <div class="legend-item">
+        <div class="legend-color" style="background: #c084fc;"></div>
+        <span>End</span>
+      </div>
+      <div class="legend-item">
+        <div class="legend-color" style="background: #333;"></div>
+        <span>Wall</span>
+      </div>
+      <div class="legend-item">
+        <div class="legend-color" style="background: #4a7c59;"></div>
+        <span>Explored</span>
+      </div>
+      <div class="legend-item">
+        <div class="legend-color" style="background: #ffd700;"></div>
+        <span>Path</span>
+      </div>
+    </div>
+
+    <div class="info">
+      <div class="algo-section">
+        <div class="algo-name">BFS</div>
+        <div class="algo-desc">Expands level by level. Finds the shortest path. Good baseline for pathfinding.</div>
+      </div>
+      <div class="algo-section">
+        <div class="algo-name">A*</div>
+        <div class="algo-desc">Smart search with heuristics. The fastest and still optimal. Used everywhere from game engines to GPS.</div>
+      </div>
+      <div class="algo-section">
+        <div class="algo-name">DFS</div>
+        <div class="algo-desc">Dives deep then backtracks. Doesn't find shortest path but useful for mazes and exploring.</div>
+      </div>
+      <div class="algo-section">
+        <div class="algo-name">Dijkstra's</div>
+        <div class="algo-desc">Distance-based exploration. Works with weighted graphs. The foundation for real-world routing.</div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const canvas = document.getElementById('canvas');
+    const ctx = canvas.getContext('2d');
+    const GRID_SIZE = 25;
+    const CELL_SIZE = 20;
+    
+    canvas.width = GRID_SIZE * CELL_SIZE;
+    canvas.height = GRID_SIZE * CELL_SIZE;
+
+    let grid = Array(GRID_SIZE).fill().map(() => Array(GRID_SIZE).fill(0));
+    let start = { x: 5, y: 5 };
+    let end = { x: GRID_SIZE - 6, y: GRID_SIZE - 6 };
+    let isDrawing = false;
+    let currentAlgorithm = 'bfs';
+    let isAnimating = false;
+    let mode = 'walls'; // 'walls', 'start', 'end'
+
+    const EMPTY = 0, WALL = 1, VISITED = 2, PATH = 3;
+
+    function drawGrid() {
+      ctx.fillStyle = '#11162a';
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+      
+      for (let i = 0; i < GRID_SIZE; i++) {
+        for (let j = 0; j < GRID_SIZE; j++) {
+          const x = j * CELL_SIZE;
+          const y = i * CELL_SIZE;
+          
+          if (i === start.y && j === start.x) {
+            ctx.fillStyle = '#6aa6ff';
+          } else if (i === end.y && j === end.x) {
+            ctx.fillStyle = '#c084fc';
+          } else if (grid[i][j] === WALL) {
+            ctx.fillStyle = '#333';
+          } else if (grid[i][j] === PATH) {
+            ctx.fillStyle = '#ffd700';
+          } else if (grid[i][j] === VISITED) {
+            ctx.fillStyle = '#4a7c59';
+          } else {
+            ctx.fillStyle = '#11162a';
+          }
+          
+          ctx.fillRect(x, y, CELL_SIZE - 1, CELL_SIZE - 1);
+        }
+      }
+    }
+
+    canvas.addEventListener('mousedown', () => { isDrawing = true; });
+    canvas.addEventListener('mouseup', () => { isDrawing = false; });
+    canvas.addEventListener('mousemove', handleClick);
+    canvas.addEventListener('click', handleClick);
+
+    function handleClick(e) {
+      const rect = canvas.getBoundingClientRect();
+      const x = Math.floor((e.clientX - rect.left) / CELL_SIZE);
+      const y = Math.floor((e.clientY - rect.top) / CELL_SIZE);
+      
+      if (x < 0 || x >= GRID_SIZE || y < 0 || y >= GRID_SIZE) return;
+
+      if (mode === 'walls' && isDrawing) {
+        grid[y][x] = grid[y][x] === WALL ? EMPTY : WALL;
+        drawGrid();
+      } else if (mode === 'start') {
+        start = { x, y };
+        grid[y][x] = EMPTY;
+        drawGrid();
+      } else if (mode === 'end') {
+        end = { x, y };
+        grid[y][x] = EMPTY;
+        drawGrid();
+      }
+    }
+
+    // Mode buttons
+    document.getElementById('drawWalls').onclick = () => {
+      mode = 'walls';
+      document.querySelectorAll('.mode-btn').forEach(b => b.classList.remove('active'));
+      document.getElementById('drawWalls').classList.add('active');
+    };
+
+    document.getElementById('placeStart').onclick = () => {
+      mode = 'start';
+      document.querySelectorAll('.mode-btn').forEach(b => b.classList.remove('active'));
+      document.getElementById('placeStart').classList.add('active');
+    };
+
+    document.getElementById('placeEnd').onclick = () => {
+      mode = 'end';
+      document.querySelectorAll('.mode-btn').forEach(b => b.classList.remove('active'));
+      document.getElementById('placeEnd').classList.add('active');
+    };
+
+    async function bfs() {
+      const visited = new Set();
+      const queue = [[start.x, start.y]];
+      const parent = {};
+      parent[`${start.x},${start.y}`] = null;
+
+      while (queue.length > 0) {
+        const [x, y] = queue.shift();
+        if (x === end.x && y === end.y) return tracePath(parent);
+        
+        if (visited.has(`${x},${y}`)) continue;
+        visited.add(`${x},${y}`);
+        
+        if (!(x === start.x && y === start.y)) {
+          grid[y][x] = VISITED;
+        }
+        drawGrid();
+        await new Promise(r => setTimeout(r, 10));
+
+        for (const [dx, dy] of [[0,1],[1,0],[0,-1],[-1,0]]) {
+          const nx = x + dx, ny = y + dy;
+          if (nx >= 0 && nx < GRID_SIZE && ny >= 0 && ny < GRID_SIZE && 
+              grid[ny][nx] !== WALL && !visited.has(`${nx},${ny}`)) {
+            parent[`${nx},${ny}`] = [x, y];
+            queue.push([nx, ny]);
+          }
+        }
+      }
+    }
+
+    async function astar() {
+      const h = (x, y) => Math.abs(x - end.x) + Math.abs(y - end.y);
+      const visited = new Set();
+      const open = [[0, start.x, start.y]];
+      const parent = {};
+      const gScore = {};
+      gScore[`${start.x},${start.y}`] = 0;
+
+      while (open.length > 0) {
+        open.sort((a, b) => a[0] - b[0]);
+        const [_, x, y] = open.shift();
+        const key = `${x},${y}`;
+
+        if (x === end.x && y === end.y) return tracePath(parent);
+        if (visited.has(key)) continue;
+        visited.add(key);
+
+        if (!(x === start.x && y === start.y)) {
+          grid[y][x] = VISITED;
+        }
+        drawGrid();
+        await new Promise(r => setTimeout(r, 10));
+
+        for (const [dx, dy] of [[0,1],[1,0],[0,-1],[-1,0]]) {
+          const nx = x + dx, ny = y + dy;
+          const nkey = `${nx},${ny}`;
+          if (nx >= 0 && nx < GRID_SIZE && ny >= 0 && ny < GRID_SIZE && 
+              grid[ny][nx] !== WALL && !visited.has(nkey)) {
+            const tentativeG = (gScore[key] || 0) + 1;
+            if (!gScore[nkey] || tentativeG < gScore[nkey]) {
+              parent[nkey] = [x, y];
+              gScore[nkey] = tentativeG;
+              open.push([tentativeG + h(nx, ny), nx, ny]);
+            }
+          }
+        }
+      }
+    }
+
+    async function dfs() {
+      const visited = new Set();
+      const parent = {};
+
+      async function search(x, y) {
+        if (x === end.x && y === end.y) return true;
+        if (visited.has(`${x},${y}`) || grid[y][x] === WALL) return false;
+        
+        visited.add(`${x},${y}`);
+        if (!(x === start.x && y === start.y)) grid[y][x] = VISITED;
+        drawGrid();
+        await new Promise(r => setTimeout(r, 10));
+
+        for (const [dx, dy] of [[0,1],[1,0],[0,-1],[-1,0]]) {
+          const nx = x + dx, ny = y + dy;
+          if (nx >= 0 && nx < GRID_SIZE && ny >= 0 && ny < GRID_SIZE) {
+            parent[`${nx},${ny}`] = [x, y];
+            if (await search(nx, ny)) return true;
+          }
+        }
+        return false;
+      }
+
+      if (await search(start.x, start.y)) {
+        tracePath(parent);
+      }
+    }
+
+    async function dijkstra() {
+      const dist = {};
+      const visited = new Set();
+      const parent = {};
+      
+      for (let i = 0; i < GRID_SIZE; i++) {
+        for (let j = 0; j < GRID_SIZE; j++) {
+          dist[`${j},${i}`] = Infinity;
+        }
+      }
+      dist[`${start.x},${start.y}`] = 0;
+
+      while (visited.size < GRID_SIZE * GRID_SIZE) {
+        let minDist = Infinity, minNode = null;
+        for (let i = 0; i < GRID_SIZE; i++) {
+          for (let j = 0; j < GRID_SIZE; j++) {
+            const key = `${j},${i}`;
+            if (!visited.has(key) && dist[key] < minDist) {
+              minDist = dist[key];
+              minNode = [j, i];
+            }
+          }
+        }
+
+        if (!minNode || minDist === Infinity) break;
+        const [x, y] = minNode;
+        const key = `${x},${y}`;
+        visited.add(key);
+
+        if (x === end.x && y === end.y) return tracePath(parent);
+
+        if (!(x === start.x && y === start.y)) {
+          grid[y][x] = VISITED;
+        }
+        drawGrid();
+        await new Promise(r => setTimeout(r, 10));
+
+        for (const [dx, dy] of [[0,1],[1,0],[0,-1],[-1,0]]) {
+          const nx = x + dx, ny = y + dy;
+          const nkey = `${nx},${ny}`;
+          if (nx >= 0 && nx < GRID_SIZE && ny >= 0 && ny < GRID_SIZE && 
+              grid[ny][nx] !== WALL && !visited.has(nkey)) {
+            const newDist = dist[key] + 1;
+            if (newDist < dist[nkey]) {
+              dist[nkey] = newDist;
+              parent[nkey] = [x, y];
+            }
+          }
+        }
+      }
+    }
+
+    function tracePath(parent) {
+      let current = `${end.x},${end.y}`;
+      while (parent[current]) {
+        const [x, y] = parent[current];
+        if (!(x === start.x && y === start.y)) grid[y][x] = PATH;
+        current = `${x},${y}`;
+      }
+      drawGrid();
+    }
+
+    async function runVisualization() {
+      if (isAnimating) return;
+      isAnimating = true;
+
+      // Clear visited and path
+      for (let i = 0; i < GRID_SIZE; i++) {
+        for (let j = 0; j < GRID_SIZE; j++) {
+          if (grid[i][j] === VISITED || grid[i][j] === PATH) {
+            grid[i][j] = EMPTY;
+          }
+        }
+      }
+      drawGrid();
+
+      if (currentAlgorithm === 'bfs') await bfs();
+      else if (currentAlgorithm === 'astar') await astar();
+      else if (currentAlgorithm === 'dfs') await dfs();
+      else if (currentAlgorithm === 'dijkstra') await dijkstra();
+
+      isAnimating = false;
+    }
+
+    document.getElementById('bfs').onclick = () => {
+      currentAlgorithm = 'bfs';
+      document.querySelectorAll('.controls button').forEach(b => b.classList.remove('active'));
+      document.getElementById('bfs').classList.add('active');
+      runVisualization();
+    };
+
+    document.getElementById('astar').onclick = () => {
+      currentAlgorithm = 'astar';
+      document.querySelectorAll('.controls button').forEach(b => b.classList.remove('active'));
+      document.getElementById('astar').classList.add('active');
+      runVisualization();
+    };
+
+    document.getElementById('dfs').onclick = () => {
+      currentAlgorithm = 'dfs';
+      document.querySelectorAll('.controls button').forEach(b => b.classList.remove('active'));
+      document.getElementById('dfs').classList.add('active');
+      runVisualization();
+    };
+
+    document.getElementById('dijkstra').onclick = () => {
+      currentAlgorithm = 'dijkstra';
+      document.querySelectorAll('.controls button').forEach(b => b.classList.remove('active'));
+      document.getElementById('dijkstra').classList.add('active');
+      runVisualization();
+    };
+
+    document.getElementById('reset').onclick = () => {
+      grid = Array(GRID_SIZE).fill().map(() => Array(GRID_SIZE).fill(0));
+      drawGrid();
+    };
+
+    // Set initial active button
+    document.getElementById('bfs').classList.add('active');
+    drawGrid();
+  </script>
+</body>
+</html>
